@@ -1,0 +1,25 @@
+.update-profile {
+    .profile {
+        width: 90%;
+        background-color: var(--light-gray);
+        border-radius: 20px;
+        padding: 20px;
+    }
+
+    .profile-row {
+        display: grid;
+        grid-template-columns: 20% 80%;
+    }
+
+    .profile-label {
+        font-size: var(--body-font-size-s);
+        margin-bottom: 10px;
+        text-align: right;
+        margin-right: 30px;
+    }   
+
+    .profile-value {
+        font-size: var(--body-font-size-m);
+        font-weight: bold;
+    }
+}

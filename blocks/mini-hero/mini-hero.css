@@ -1,0 +1,41 @@
+.section.mini-hero-container {
+    padding: 0;
+}
+
+.mini-hero-wrapper {
+    max-width: unset !important;
+    width: 100%;
+}
+
+.mini-hero {
+    >div {
+        position: relative;
+        height: 250px;
+        overflow: hidden;
+    }
+
+    .background {
+        position: absolute;
+        bottom: -50px;
+        height: auto;
+        width: 100%;
+        z-index: 1;
+        background-color: black;
+
+        img {
+            opacity: 0.8;
+        }
+    }
+
+    .content {
+        position: relative;
+        z-index: 2;
+        max-width: 1200px;
+        padding: 64px 0;
+        margin: auto;
+        font-size: var(--heading-font-size-xl);
+        color: white;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgb(0 0 0 / 50%);
+    }
+}

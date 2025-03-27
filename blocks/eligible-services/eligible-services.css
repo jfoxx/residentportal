@@ -1,0 +1,80 @@
+.eligible-services-container {
+    >div.eligible-services-wrapper { display: none;}
+
+    &.flipped {
+        >div { display: none;}
+        >div.eligible-services-wrapper { display: block;}
+    }
+}
+
+.eligible-services {
+    .eligible-services-actions {
+        display: flex;
+        justify-content: left;
+        margin-bottom: 1em;
+
+        button {
+            background-color: unset;
+            border: 2px solid currentcolor;
+            color: var(--blue);
+            cursor: pointer;
+            padding: 0.5em 1em;
+            margin-right: 1em;
+
+            &.saved {
+                background-color: var(--green);
+                color: white;
+                position: relative;
+                padding-right: 40px;
+
+                &::after {
+                    content: '';
+                    mask-image: url('/icons/check.svg');
+                    mask-repeat: no-repeat;
+                    width: 20px;
+                    height: 20px;
+                    display: inline-block;
+                    position: absolute;
+                    right: 5px;
+                    top: 5px;
+                    background-color: white;
+                    z-index: 2;
+                }
+            }
+
+        }
+    }
+
+    ul.service-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li a{
+            display: grid;
+            grid-template-columns: 10% 90%;
+            grid-template-areas: 
+            "checkbox title"
+            ". description";
+            margin-bottom: 1em;
+
+            &:hover {
+                text-decoration: none;
+            }   
+
+            input {
+                grid-area: checkbox;
+            }
+            
+            span.title {
+                grid-area: title;
+                font-weight: bold;
+            }
+
+            span.description {
+                grid-area: description;
+                color: var(--text-color);
+            }
+        }
+    }
+}

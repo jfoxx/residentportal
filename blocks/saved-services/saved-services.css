@@ -1,0 +1,52 @@
+.saved-services {
+    ul.saved-service-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            button {
+                background-color: var(--red);
+                cursor: pointer;
+                width: 20px;
+                height: 20px;
+                margin-right: 2rem;
+                padding: 0;
+                overflow: hidden;
+                mask-image: url('/icons/trash-can.svg');
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                color: transparent;
+                border-radius: unset;
+
+                &:hover {
+                    background-color: var(--red-dark);
+                }
+            }
+
+            a{
+                margin-bottom: 1em;
+    
+                &:hover {
+                    text-decoration: none;
+                }    
+    
+                input {
+                    grid-area: checkbox;
+                } 
+                
+                span.title {
+                    grid-area: title;
+                    font-weight: bold;
+                }
+    
+                span.description {
+                    grid-area: description;
+                    color: var(--text-color);
+                    margin-left: 1rem;
+                    font-size: var(--body-font-size-s);
+                }
+            }
+        } 
+    }
+}

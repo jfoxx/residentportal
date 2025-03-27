@@ -1,0 +1,41 @@
+.cfsc-counter {
+    .banner {
+        background-color: var(--blue);
+        color: white;
+        text-align: center;
+        position: relative;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-top: 50px solid transparent;
+            border-bottom: 50px solid transparent;
+            border-left: 50px solid white;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: -12px;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-top: 50px solid transparent;
+            border-bottom: 50px solid transparent;
+            border-right: 50px solid white;
+        }
+
+        span.cal {
+            display: inline-block;
+            background-color: var(--green);
+            padding: 20px;
+            rotate: -15deg;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+        }
+    }
+}

@@ -1,0 +1,24 @@
+.alerts {
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            margin: 0 0 10px;
+            background-color: var(--yellow);
+            font-size: var(--body-font-size-s);
+
+            button.dismiss {
+                width: 20px;
+                height: 20px;
+                mask-image: url('/icons/circle-xmark.svg');
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                background-color: black;
+            }
+        }
+    }
+
+}

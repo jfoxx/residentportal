@@ -1,0 +1,141 @@
+.service-search-results-wrapper {
+    padding-top: 100px;
+}
+
+.service-search-results {
+    .search-wrapper {
+        display: grid;
+        grid-template: 100px 1fr max-content /  1fr 1fr 1fr 1fr;
+        grid-template-areas: 
+        "field field field field"
+        "filters results results results";
+
+        .search-field {
+            grid-area: field;
+
+            .search-field {
+                width: 80%;
+                border-radius: 20px;
+                padding-left: 20px;
+                height: 40px;
+              }
+             
+              .search-button {
+               height: 40px;
+               margin: 0 0 0 10px;
+              }
+        }
+
+        .search-filters {
+            grid-area: filters;
+            padding-right: 40px;
+
+            form {
+                background-color: var(--light-gray);
+                padding: 10px;
+                border-radius: 20px;
+
+                label {
+                    display: block;
+                    font-size: var(--body-font-size-s);
+                    margin-top: 30px;
+                }
+
+                select {
+                    height: 30px;
+                    border-radius: 5px;
+                    border: 1px solid var(--blue);
+                    width: 100%;
+                }
+            }
+
+        }
+
+        .search-results {
+            grid-area: results;
+
+            ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+
+    
+                li {
+                    margin: 0 0 10px;
+
+                    &.match {
+                        display: block;
+                    }
+
+                    &.unmatch {
+                        display: none;
+                    }
+
+                    &[data-match-count='0']{
+                        display: none;
+                    }
+
+                    &[data-match-count='5']{
+                       order: 1;
+                    }
+
+                    &[data-match-count='4']{
+                        order: 2;
+                    }
+
+                    &[data-match-count='3']{
+                        order: 3;
+                    }
+
+                    &[data-match-count='2']{
+                        order: 4;
+                    }
+
+                    &[data-match-count='1']{
+                        order: 5;
+                    }
+
+    
+                    a {
+                        text-decoration: none;
+                        display: grid;
+                        grid-template-columns: 100px 1fr;
+                        grid-template-areas: 
+                        "icon title"
+                        "icon description";
+                        margin: 0 0 30px;
+    
+                        .icon {
+                            background-color: var(--blue);
+                            width: 60px;
+                            height: 60px;
+                            display: inline-block;
+                            mask-size: contain;
+                            mask-repeat: no-repeat;
+                            grid-area: icon;
+                            align-self: center;
+                        }
+    
+                        .title {
+                            font-family: var(--heading-font-family);
+                            font-size: var(--heading-font-size-s);
+                            grid-area: title;
+                            align-self: end;
+                        }
+    
+                        .description {
+                            color: black;
+                            font-size: var(--body-font-size-s);
+                            grid-area: description;
+                            align-self: start;
+                        }
+                    }
+                }
+            }
+        }
+
+  
+    }
+}

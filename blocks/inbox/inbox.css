@@ -1,0 +1,59 @@
+.inbox {
+    h3 {
+        margin: 0 0 10px;
+        font-size: var(--heading-font-size-s);
+    }
+
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        border: 1px solid var(--light-color);
+
+        li {
+            display: grid;
+            grid-template-columns: 10% 25% 15% 50%;
+            border: 1px solid var(--light-color);
+            font-size: var(--body-font-size-s);
+
+            &.message-header {
+                background-color: var(--blue) !important;
+                color: white;
+                font-weight: 600;
+
+                span {
+                    padding: 10px;
+                    display: block;
+                }
+            }
+
+            &:hover {
+                background-color: var(--light-color);
+                cursor: pointer;
+            }
+
+            span.message-body {
+                display: none;
+                padding: 10px;
+                grid-column: 1 / span 3;
+            }
+
+            &.expanded {
+                span.message-body {
+                    display: block;
+                }
+            }
+
+            .message-action button {
+                width: 20px;
+                height: 20px;
+                mask-image: url('/icons/trash-can.svg');
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                background-color: var(--red);
+                color: transparent;
+            }
+        }
+    }
+}
