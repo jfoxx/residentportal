@@ -44,7 +44,7 @@
                 select {
                     height: 30px;
                     border-radius: 5px;
-                    border: 1px solid var(--blue);
+                    border: 1px solid var(--primary-color);
                     width: 100%;
                 }
             }
@@ -108,7 +108,7 @@
                         margin: 0 0 30px;
     
                         .icon {
-                            background-color: var(--blue);
+                            background-color: var(--primary-color);
                             width: 60px;
                             height: 60px;
                             display: inline-block;

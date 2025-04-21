@@ -16,13 +16,13 @@
         button {
             background-color: unset;
             border: 2px solid currentcolor;
-            color: var(--blue);
+            color: var(--primary-color);
             cursor: pointer;
             padding: 0.5em 1em;
             margin-right: 1em;
 
             &.saved {
-                background-color: var(--green);
+                background-color: var(--secondary-color);
                 color: white;
                 position: relative;
                 padding-right: 40px;
