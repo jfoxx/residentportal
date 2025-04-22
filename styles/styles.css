@@ -11,10 +11,10 @@
  */
 
 :root {
-  /* WARP Colors */
-  --blue: #28485d;
-  --green: #38807c;
-  --light-blue: #b6ebfc;
+
+  --primary-color: #28485d;
+  --secondary-color: #38807c;
+  --light-primary: #b6ebfc;
   --light-gray: #e3e3e3;
   --red: #d61f1f;
   --red-dark: #8e0505;
@@ -22,7 +22,7 @@
 
 
   /* colors */
-  --link-color: var(--green);
+  --link-color: var(--secondary-color);
   --link-hover-color: #136ff6;
   --background-color: white;
   --light-color: #eee;
@@ -247,7 +247,7 @@ body.logged-in .section[data-userstate='logged-in'] {
     position: absolute;
     top: 10px;
     right: -15px;
-    background-color: var(--green);
+    background-color: var(--secondary-color);
     mask-image: url("/icons/close.svg");
     mask-repeat: no-repeat;
     mask-size: contain;
