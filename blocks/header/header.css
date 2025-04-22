@@ -157,7 +157,7 @@ header nav .nav-brand a {
 
   &::before {
     content: '';
-    background: var(----primary-color, black);
+    background: var(--primary-color, black);
     width: 1px;
     height: calc(var(--nav-height) - 20px);
     display: block;
