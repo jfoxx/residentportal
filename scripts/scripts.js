@@ -11,6 +11,8 @@ import {
   loadCSS,
 } from './aem.js';
 
+import ffetch from './ffetch.js';
+
 const LCP_BLOCKS = []; // add your LCP blocks to the list
 
 export function checkLoginStatus() {
@@ -18,6 +20,22 @@ export function checkLoginStatus() {
     return true;
   }
   return false;
+}
+
+async function getColors() {
+  const styles = await ffetch('/admin/styles.json').all();
+  const styleBlock = document.createElement('style');
+  let colors = '';
+  styles.forEach((style) => {
+    const color = style.key;
+    const hex = style.value;
+    if (color && hex) {
+      colors += `${color}: ${hex};\n`;
+    }
+  });
+
+  styleBlock.innerText = `:root { ${colors} }`;
+  document.head.append(styleBlock);
 }
 
 function overrideFormSubmit(form) {
@@ -227,6 +245,8 @@ function buildAutoBlocks() {
 // eslint-disable-next-line import/prefer-default-export
 export function decorateMain(main) {
   // hopefully forward compatible button decoration
+
+  getColors();
   decorateButtons(main);
   decorateIcons(main);
   buildAutoBlocks(main);

@@ -11,23 +11,22 @@
  */
 
 :root {
-
-  --primary-color: #28485d;
-  --secondary-color: #38807c;
-  --light-primary: #b6ebfc;
-  --light-gray: #e3e3e3;
-  --red: #d61f1f;
-  --red-dark: #8e0505;
-  --yellow: #ebdd71;
+  --primary-color: #808080;
+  --secondary-color: #808080;
+  --light-primary: #808080;
+  --light-gray: #808080;
+  --red: #808080;
+  --red-dark: #808080;
+  --yellow: #808080;
 
 
   /* colors */
   --link-color: var(--secondary-color);
-  --link-hover-color: #136ff6;
+  --link-hover-color: #808080;
   --background-color: white;
-  --light-color: #eee;
-  --dark-color: #ccc;
-  --text-color: black;
+  --light-color: #808080;
+  --dark-color: #808080;
+  --text-color: #808080;
 
   /* fonts */
   --body-font-family: roboto, roboto-fallback;
