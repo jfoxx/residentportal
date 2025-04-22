@@ -154,10 +154,11 @@ header nav .nav-brand a {
   display: flex;
   width: 300px;
   justify-content: space-between;
+  color: unset;
 
   &::before {
     content: '';
-    background: var(--primary-color, black);
+    background: var(--primary-color);
     width: 1px;
     height: calc(var(--nav-height) - 20px);
     display: block;
@@ -168,11 +169,13 @@ header nav .nav-brand a {
 }
 
 header nav .nav-brand img {
-  width: 30%;
+  width: auto;
   height: auto;
+  max-height: calc(var(--nav-height) - 20px);
+  margin-top: 5px;
   border-radius: 50%;
-  aspect-ratio: 1;
-  border: 3px solid var(--primary-color, black);
+  aspect-ratio: 1/1;
+  border: 3px solid var(--primary-color);
   order: 1;
 }
 
@@ -182,6 +185,8 @@ header nav .nav-brand .brand-text {
   align-self: center;
   padding-left: 10px;
   order: 3;
+  color: var(--primary-color);
+  font-size: var(--heading-font-size-l);
 }
 
 header nav .nav-brand .default-content-wrapper {
