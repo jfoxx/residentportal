@@ -13,6 +13,26 @@ import {
 
 import ffetch from './ffetch.js';
 
+const experimentationConfig = {
+  prodHost: 'www.my-site.com',
+  audiences: {
+    mobile: () => window.innerWidth < 600,
+    desktop: () => window.innerWidth >= 600,
+    // define your custom audiences here as needed
+  }
+};
+
+let runExperimentation;
+let showExperimentationOverlay;
+const isExperimentationEnabled = document.head.querySelector('[name^="experiment"],[name^="campaign-"],[name^="audience-"],[property^="campaign:"],[property^="audience:"]')
+    || [...document.querySelectorAll('.section-metadata div')].some((d) => d.textContent.match(/Experiment|Campaign|Audience/i));
+if (isExperimentationEnabled) {
+  ({
+    loadEager: runExperimentation,
+    loadLazy: showExperimentationOverlay,
+  } = await import('../plugins/experimentation/src/index.js'));
+}
+
 const LCP_BLOCKS = []; // add your LCP blocks to the list
 
 export function checkLoginStatus() {
@@ -259,9 +279,11 @@ export function decorateMain(main) {
  * @param {Element} doc The container element
  */
 async function loadEager(doc) {
+  if (runExperimentation) {
+    await runExperimentation(document, experimentationConfig);
+  }
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
-
   const main = doc.querySelector('main');
   if (main) {
     decorateMain(main);
@@ -312,6 +334,10 @@ async function loadLazy(doc) {
 
   if (document.querySelector('form[data-formpath="/content/forms/af/washington/toll-dispute/jcr:content/guideContainer"]')) {
     document.querySelectorAll('form[data-formpath="/content/forms/af/washington/toll-dispute/jcr:content/guideContainer"]').forEach((form) => overrideFormSubmit(form));
+  }
+
+  if (showExperimentationOverlay) {
+    await showExperimentationOverlay(document, experimentationConfig);
   }
 }
 
