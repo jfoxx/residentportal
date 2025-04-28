@@ -19,7 +19,7 @@ const experimentationConfig = {
     mobile: () => window.innerWidth < 600,
     desktop: () => window.innerWidth >= 600,
     // define your custom audiences here as needed
-  }
+  },
 };
 
 let runExperimentation;
@@ -30,7 +30,7 @@ if (isExperimentationEnabled) {
   ({
     loadEager: runExperimentation,
     loadLazy: showExperimentationOverlay,
-  } = await import('../plugins/experimentation/src/index.js'));
+  } = await import('@adobe/aem-experimentation/src/index.js'));
 }
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list

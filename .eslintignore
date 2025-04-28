@@ -5,3 +5,4 @@ scripts/editor-support-rte.js
 scripts/form-editor-support.js
 scripts/ffetch.js
 tools/importer/helix-importer-ui/*
+plugins/*
