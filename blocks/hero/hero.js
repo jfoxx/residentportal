@@ -19,4 +19,10 @@ export default function decorate(block) {
   searchWrapper.append(field, button);
   block.append(searchWrapper);
   button.addEventListener('click', handleSearch);
+  field.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  });
+  field.focus();
 }

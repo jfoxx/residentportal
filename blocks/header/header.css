@@ -1,9 +1,16 @@
+header {
+  position: relative;
+  z-index: 5;
+}
+
 /* header and nav layout */
 header .nav-wrapper {
   background-color: var(--background-color);
   width: 100%;
   z-index: 2;
   position: fixed;
+  box-shadow: 2px 0 14px rgb(0 0 0 / 80%);
+
 }
 
 header nav {

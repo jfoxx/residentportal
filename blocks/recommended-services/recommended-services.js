@@ -1,7 +1,11 @@
+import { getEndpoint } from '../../scripts/scripts.js';
+
+const randomNumber = Math.floor(Math.random() * 1000);
+const endpoint = getEndpoint();
+
 async function fetchAndDisplayRecommendedServices(serviceId, target) {
-  const randomNumber = Math.floor(Math.random() * 1000);
   try {
-    const response = await fetch(`https://publish-p49252-e308251.adobeaemcloud.com/graphql/execute.json/warp/getServiceById;id=${serviceId}?${randomNumber}`);
+    const response = await fetch(`${endpoint}/getServiceById;id=${serviceId}?${randomNumber}`);
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }

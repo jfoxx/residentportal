@@ -1,7 +1,7 @@
-import { getEndpoint } from "/scripts/scripts.js";
+import { getEndpoint } from '../../scripts/scripts.js';
 
 const randomNumber = Math.floor(Math.random() * 1000);
-const endpoint = `${getEndpoint()}?${randomNumber}`;
+const endpoint = `${getEndpoint()}/getAllServices?${randomNumber}`;
 
 function getIcon(tag) {
   const units = tag.split('/');
@@ -81,7 +81,7 @@ function filterResults() {
   });
 }
 
-async function fetchAndDisplayServices(target, endpoint) {
+async function fetchAndDisplayServices(target) {
   try {
     const response = await fetch(endpoint);
     if (!response.ok) {
@@ -164,7 +164,7 @@ function handleSearch() {
   window.location.search = `q=${keyword}`;
   const searchResults = document.querySelector('.search-results');
   searchResults.textContent = '';
-  fetchAndDisplayServices(searchResults, endpoint);
+  fetchAndDisplayServices(searchResults);
   filterKeyword(keyword);
 }
 
@@ -324,5 +324,10 @@ export default function decorate(block) {
   block.append(searchFieldWrapper);
 
   button.addEventListener('click', handleSearch);
-  fetchAndDisplayServices(searchResults, endpoint);
+  field.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  });
+  fetchAndDisplayServices(searchResults);
 }
