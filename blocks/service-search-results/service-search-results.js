@@ -1,4 +1,7 @@
+import { getEndpoint } from "/scripts/scripts.js";
+
 const randomNumber = Math.floor(Math.random() * 1000);
+const endpoint = `${getEndpoint()}?${randomNumber}`;
 
 function getIcon(tag) {
   const units = tag.split('/');
@@ -8,7 +11,7 @@ function getIcon(tag) {
 }
 
 function getAgency(tag) {
-  const units = tag.split('agency/');
+  const units = tag.split('agencies/');
   let agency = units[1].toString();
   agency = agency.toLowerCase();
   return agency;
@@ -161,7 +164,7 @@ function handleSearch() {
   window.location.search = `q=${keyword}`;
   const searchResults = document.querySelector('.search-results');
   searchResults.textContent = '';
-  fetchAndDisplayServices(searchResults, `https://publish-p49252-e308251.adobeaemcloud.com/graphql/execute.json/warp/allServices?${randomNumber}`);
+  fetchAndDisplayServices(searchResults, endpoint);
   filterKeyword(keyword);
 }
 
@@ -321,5 +324,5 @@ export default function decorate(block) {
   block.append(searchFieldWrapper);
 
   button.addEventListener('click', handleSearch);
-  fetchAndDisplayServices(searchResults, `https://publish-p49252-e308251.adobeaemcloud.com/graphql/execute.json/warp/allServices?${randomNumber}`);
+  fetchAndDisplayServices(searchResults, endpoint);
 }

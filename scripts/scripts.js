@@ -1,3 +1,4 @@
+import { getMetadata } from '../plugins/experimentation/src/index.js';
 import {
   sampleRUM,
   loadHeader,
@@ -56,6 +57,11 @@ async function getColors() {
 
   styleBlock.innerText = `:root { ${colors} }`;
   document.head.append(styleBlock);
+}
+
+export function getEndpoint() {
+  const endpoint = `https://${getMetadata('serviceendpoint')}`;
+  return endpoint;
 }
 
 function overrideFormSubmit(form) {
