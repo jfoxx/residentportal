@@ -1,7 +1,6 @@
 export default function decorate(block) {
   block.textContent = '';
   const activeRequest = JSON.parse(window.localStorage.getItem('activeRequests')) || [];
-  console.log(activeRequest);
   if (activeRequest.title) {
     const sectionTitle = document.createElement('h3');
     sectionTitle.textContent = 'Active Requests';
@@ -30,6 +29,6 @@ export default function decorate(block) {
 
     block.appendChild(ul);
   } else {
-    console.log('No active requests');
+    // No active requests
   }
 }

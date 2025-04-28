@@ -9,29 +9,10 @@ import {
   waitForLCP,
   loadBlocks,
   loadCSS,
+  getMetadata,
 } from './aem.js';
 
 import ffetch from './ffetch.js';
-
-const experimentationConfig = {
-  prodHost: 'www.my-site.com',
-  audiences: {
-    mobile: () => window.innerWidth < 600,
-    desktop: () => window.innerWidth >= 600,
-    // define your custom audiences here as needed
-  }
-};
-
-let runExperimentation;
-let showExperimentationOverlay;
-const isExperimentationEnabled = document.head.querySelector('[name^="experiment"],[name^="campaign-"],[name^="audience-"],[property^="campaign:"],[property^="audience:"]')
-    || [...document.querySelectorAll('.section-metadata div')].some((d) => d.textContent.match(/Experiment|Campaign|Audience/i));
-if (isExperimentationEnabled) {
-  ({
-    loadEager: runExperimentation,
-    loadLazy: showExperimentationOverlay,
-  } = await import('../plugins/experimentation/src/index.js'));
-}
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
 
@@ -58,6 +39,11 @@ async function getColors() {
   document.head.append(styleBlock);
 }
 
+export function getEndpoint() {
+  const endpoint = `https://${getMetadata('serviceendpoint')}`;
+  return endpoint;
+}
+
 function overrideFormSubmit(form) {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -82,7 +68,6 @@ function updateProfile() {
     const profile = {};
     ['firstName', 'lastName', 'email', 'phone', 'state'].forEach((property) => {
       const input = form.querySelector(`*[name="${property}"]`);
-      console.log(input.value);
       if (input.value) {
         profile[property] = input.value;
         window.localStorage.setItem(property, input.value);
@@ -279,9 +264,6 @@ export function decorateMain(main) {
  * @param {Element} doc The container element
  */
 async function loadEager(doc) {
-  if (runExperimentation) {
-    await runExperimentation(document, experimentationConfig);
-  }
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
@@ -334,10 +316,6 @@ async function loadLazy(doc) {
 
   if (document.querySelector('form[data-formpath="/content/forms/af/washington/toll-dispute/jcr:content/guideContainer"]')) {
     document.querySelectorAll('form[data-formpath="/content/forms/af/washington/toll-dispute/jcr:content/guideContainer"]').forEach((form) => overrideFormSubmit(form));
-  }
-
-  if (showExperimentationOverlay) {
-    await showExperimentationOverlay(document, experimentationConfig);
   }
 }
 
