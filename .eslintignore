@@ -3,5 +3,6 @@ scripts/editor-support.js
 scripts/editor-support-rte.js
 scripts/form-editor-support.js
 scripts/ffetch.js
+scripts/at.fix.min.js
 tools/importer/helix-importer-ui/*
 plugins/*
