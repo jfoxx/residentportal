@@ -2,11 +2,14 @@ import {
   sampleRUM,
   loadHeader,
   loadFooter,
+  buildBlock,
   decorateButtons,
   decorateSections,
   decorateBlocks,
+  decorateBlock,
   decorateTemplateAndTheme,
   waitForLCP,
+  loadBlock,
   loadBlocks,
   loadCSS,
   getMetadata,
@@ -306,6 +309,31 @@ async function getElementForMetric(metric) {
   return document.querySelector(selector);
 }
 
+function autoDecorateFragment(el) {
+  const clone = el.cloneNode(true);
+  const fragmentBlock = buildBlock('fragment', clone);
+  el.replaceWith(fragmentBlock);
+  decorateBlock(fragmentBlock);
+  return loadBlock(fragmentBlock);
+}
+
+function observeAndDecorateBlocks() {
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach((node) => {
+        if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() === 'a' && node.href) {
+          autoDecorateFragment(node);
+        }
+      });
+    });
+  });
+
+  observer.observe(document.querySelector('main'), {
+    childList: true,
+    subtree: true,
+  });
+}
+
 async function getAndApplyOffers() {
   const response = await window.adobe.target.getOffers({ request: { execute: { pageLoad: {} } } });
   const { options = [], metrics = [] } = response.execute.pageLoad;
@@ -335,7 +363,10 @@ if (getMetadata('target')) {
     viewsEnabled: false,
     withWebGLRenderer: false,
   });
-  document.addEventListener('at-library-loaded', () => getAndApplyOffers());
+  document.addEventListener('at-library-loaded', () => {
+    observeAndDecorateBlocks();
+    getAndApplyOffers();
+  });
 }
 
 /**
