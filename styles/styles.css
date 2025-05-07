@@ -82,6 +82,14 @@ body.appear {
   display: block;
 }
 
+.is-hidden {
+  display: none;
+}
+
+.at-element-marker {
+  display: none;
+}
+
 header {
   height: var(--nav-height);
 }
