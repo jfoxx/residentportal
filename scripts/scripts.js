@@ -3,7 +3,6 @@ import {
   loadHeader,
   loadFooter,
   buildBlock,
-  decorateButtons,
   decorateSections,
   decorateBlocks,
   decorateBlock,
@@ -109,6 +108,44 @@ function initModals() {
         body.removeChild(backdrop);
       }
     });
+  });
+}
+
+/**
+ * Decorates paragraphs containing a single link as buttons.
+ * @param {Element} element container element
+ */
+function decorateButtons(element) {
+  element.querySelectorAll('a:not(is-hidden)').forEach((a) => {
+    a.title = a.title || a.textContent;
+    if (a.href !== a.textContent) {
+      const up = a.parentElement;
+      const twoup = a.parentElement.parentElement;
+      if (!a.querySelector('img')) {
+        if (up.childNodes.length === 1 && (up.tagName === 'P' || up.tagName === 'DIV')) {
+          a.className = 'button'; // default
+          up.classList.add('button-container');
+        }
+        if (
+          up.childNodes.length === 1
+          && up.tagName === 'STRONG'
+          && twoup.childNodes.length === 1
+          && twoup.tagName === 'P'
+        ) {
+          a.className = 'button primary';
+          twoup.classList.add('button-container');
+        }
+        if (
+          up.childNodes.length === 1
+          && up.tagName === 'EM'
+          && twoup.childNodes.length === 1
+          && twoup.tagName === 'P'
+        ) {
+          a.className = 'button secondary';
+          twoup.classList.add('button-container');
+        }
+      }
+    }
   });
 }
 
@@ -310,8 +347,11 @@ async function getElementForMetric(metric) {
 }
 
 function autoDecorateFragment(el) {
-  const clone = el.cloneNode(true);
-  const fragmentBlock = buildBlock('fragment', clone);
+  const a = document.createElement('a');
+  const href = el.getAttribute('data-fragment');
+  a.href = href;
+  a.className = 'at-element-marker';
+  const fragmentBlock = buildBlock('fragment', a);
   el.replaceWith(fragmentBlock);
   decorateBlock(fragmentBlock);
   return loadBlock(fragmentBlock);
@@ -321,7 +361,7 @@ function observeAndDecorateBlocks() {
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       mutation.addedNodes.forEach((node) => {
-        if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() === 'a' && node.href) {
+        if (node.nodeType === Node.ELEMENT_NODE && node.hasAttribute('data-fragment')) {
           autoDecorateFragment(node);
         }
       });
