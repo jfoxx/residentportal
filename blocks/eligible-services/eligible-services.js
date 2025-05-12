@@ -1,7 +1,7 @@
 import { getEndpoint } from '../../scripts/scripts.js';
 
 const randomNumber = Math.floor(Math.random() * 1000);
-const endpoint = `${getEndpoint()}/allServices?${randomNumber}`;
+const endpoint = `${getEndpoint()}/getAllServices?${randomNumber}`;
 
 function loopProperty(property) {
   const arr = [];
