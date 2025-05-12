@@ -17,7 +17,7 @@ async function fetchAndDisplayRecommendedServices(serviceId, target) {
     link.href = service.link;
     const img = document.createElement('img');
     // eslint-disable-next-line no-underscore-dangle
-    img.src = `${service.image._dmS7Url}:square`;
+    img.src = `${service.image._dmS7Url}:11square`;
     img.alt = service.title;
     img.className = 'service-image';
     const titleSpan = document.createElement('span');
