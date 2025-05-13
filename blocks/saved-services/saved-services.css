@@ -6,7 +6,7 @@
 
         li {
             button {
-                background-color: var(--red);
+                background-color: var(--primary-color);
                 cursor: pointer;
                 width: 20px;
                 height: 20px;
