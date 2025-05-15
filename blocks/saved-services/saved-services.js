@@ -4,7 +4,6 @@ const randomNumber = Math.floor(Math.random() * 1000);
 const endpoint = getEndpoint();
 
 async function fetchAndDisplaySavedServices(serviceId, target) {
-  const randomNumber = Math.floor(Math.random() * 1000);
   try {
     const response = await fetch(`${endpoint}/getServiceById;id=${serviceId}?${randomNumber}`);
     if (!response.ok) {
