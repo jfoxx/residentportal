@@ -95,8 +95,10 @@ async function fetchAndDisplayServices(target) {
     services.forEach((service) => {
       const li = document.createElement('li');
       li.id = `serviceid-${service.serviceId}`;
-      const agencyTag = service.agency[0].toString();
-      if (agencyTag !== null) { li.dataset.agency = getAgency(agencyTag); }
+      if (service.agency) {
+        const agencyTag = service.agency[0].toString();
+        if (agencyTag !== null) { li.dataset.agency = getAgency(agencyTag); }
+      }
       if (service.income) { li.dataset.income = loopProperty(service.income); }
       if (service.military) { li.dataset.military = loopProperty(service.military); }
       if (service.employment) { li.dataset.employment = loopProperty(service.employment); }
