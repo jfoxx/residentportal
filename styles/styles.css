@@ -86,6 +86,16 @@ body.appear {
   display: none;
 }
 
+[data-reveal-panel] {
+  display: none;
+
+  &.is-visible {
+    display: block;
+  }
+}
+
+
+
 .at-element-marker {
   display: none;
 }

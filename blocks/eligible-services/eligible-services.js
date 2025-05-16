@@ -30,14 +30,22 @@ function selectAll() {
 
 function saveFavorites() {
   const button = document.querySelector('.eligible-services-actions button:last-of-type');
+  const block = document.querySelector('.eligible-services-container');
   button.classList.add('saved');
   const checkboxes = document.querySelectorAll('.service-list input[type=checkbox]:checked');
-  const favorites = [];
+  let favorites = [];
+  if (localStorage.getItem('savedServices')) {
+    favorites = JSON.parse(localStorage.getItem('savedServices'));
+  }
   checkboxes.forEach((checkbox) => {
     favorites.push(checkbox.value);
   });
   localStorage.setItem('savedServices', JSON.stringify(favorites));
-  const url = new URL(`${window.location.origin}${window.location.pathname}`);
+  let url = new URL(`${window.location.origin}${window.location.pathname}`);
+  if (block.getAttribute('data-redirect')) {
+    url = `/${block.getAttribute('data-redirect')}`;
+    console.log(url);
+  }
   window.location = url;
 }
 
@@ -71,6 +79,48 @@ function filterResults() {
   setTimeout(() => {
     container.classList.add('flipped');
     container.scrollTop = 0;
+  }, '2000');
+}
+
+function filterResultsById() {
+  const resultsBlock = document.querySelector('.eligible-services-container');
+  const results = resultsBlock.querySelectorAll('.service-list li');
+  const panelId = resultsBlock.getAttribute('data-panel-id');
+  const formContainer = document.querySelector(`[data-panel-target="${panelId}"]`);
+  const form = formContainer.querySelector('form');
+  const fieldset = form.querySelector('#services');
+  const checkboxes = fieldset.querySelectorAll('input[type=checkbox]:checked');
+  checkboxes.forEach((checkbox) => {
+    const id = checkbox.value;
+    if (id.includes(',')) {
+      const ids = id.split(',');
+      ids.forEach((i) => {
+        results.forEach((result) => {
+          if (result.id === `serviceid-${i}`) {
+            result.classList.add('match');
+          } else {
+            result.classList.add('unmatch');
+          }
+        });
+      });
+    } else {
+      results.forEach((result) => {
+        if (result.id === `serviceid-${id}`) {
+          result.classList.add('match');
+        } else {
+          result.classList.add('unmatch');
+        }
+      });
+    }
+  });
+
+  const unmatched = document.querySelectorAll('.service-list li:not(.match)');
+  unmatched.forEach((i) => {
+    i.parentElement.removeChild(i);
+  });
+
+  setTimeout(() => {
+    resultsBlock.scrollTop = 0;
   }, '2000');
 }
 
@@ -130,7 +180,11 @@ export default function decorate(block) {
   block.prepend(action);
   selectButton.addEventListener('click', selectAll);
   saveButton.addEventListener('click', saveFavorites);
-  const form = document.querySelector('.eligible-services-container form');
+  const form = document.querySelector('[data-post-block="eligible-services"] form');
   const submitButton = form.querySelector('button');
-  submitButton.addEventListener('click', filterResults);
+  if (block.classList.contains('by-id')) {
+    submitButton.addEventListener('click', filterResultsById);
+  } else {
+    submitButton.addEventListener('click', filterResults);
+  }
 }
