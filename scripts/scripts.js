@@ -46,6 +46,28 @@ export function getEndpoint() {
   return endpoint;
 }
 
+function setFormPanelReveal(el) {
+  const panelId = el.getAttribute('data-panel-target');
+  const panel = document.querySelector(`[data-panel-id="${panelId}"]`);
+  const form = el.querySelector('form');
+  const button = form.querySelector('button');
+  button.addEventListener('click', (event) => {
+    event.preventDefault();
+    button.classList.add('submitting');
+    setTimeout(() => {
+      el.classList.add('is-hidden');
+      panel.classList.add('is-visible');
+    }, 2000);
+  });
+}
+
+function setFormPanelRevealAll() {
+  const forms = document.querySelectorAll('[data-form-reveal]');
+  forms.forEach((form) => {
+    setFormPanelReveal(form);
+  });
+}
+
 function overrideFormSubmit(form) {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -461,6 +483,7 @@ async function loadLazy(doc) {
   loadHeader(doc.querySelector('header'));
   loadFooter(doc.querySelector('footer'));
   initModals();
+  setFormPanelRevealAll();
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();

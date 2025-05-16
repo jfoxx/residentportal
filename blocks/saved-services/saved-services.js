@@ -39,7 +39,8 @@ function getSavedServices(block) {
       const removeButton = document.createElement('button');
       removeButton.textContent = 'Remove';
       removeButton.addEventListener('click', () => {
-        const updatedServices = services.filter((s) => s !== service);
+        const currentSaved = JSON.parse(localStorage.getItem('savedServices') || '[]');
+        const updatedServices = currentSaved.filter((s) => s !== service);
         localStorage.setItem('savedServices', JSON.stringify(updatedServices));
         ul.removeChild(li);
       });
