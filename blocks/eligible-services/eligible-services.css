@@ -1,7 +1,7 @@
 .eligible-services-container {
     >div.eligible-services-wrapper { display: none;}
 
-    &.flipped {
+    &.flipped, &.is-visible {
         >div { display: none;}
         >div.eligible-services-wrapper { display: block;}
     }
