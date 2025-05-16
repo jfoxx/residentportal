@@ -5,7 +5,29 @@ function findUser(arr, query) {
   return arr.filter((el) => el.username === query);
 }
 
-function handleLogin() {
+async function getAlerts(username) {
+  const response = await ffetch('/admin/alerts.json').sheet(`${username}`).all();
+  console.log('Alerts:', response);
+  const immedateAlerts = response
+    .filter((alert) => alert.timing === 'immediate')
+    .map((alert) => ({ alert: alert.alert, link: alert.link }));
+
+  const deferredAlerts = response
+    .filter((alert) => alert.timing === 'deferred')
+    .map((alert) => ({ alert: alert.alert, link: alert.link }));
+
+  console.log('Immediate Alerts:', immedateAlerts);
+
+  if (immedateAlerts.length > 0) {
+    localStorage.setItem('alerts', JSON.stringify(immedateAlerts));
+  }
+  if (deferredAlerts.length > 0) {
+    console.log('Deferred Alerts:', deferredAlerts);
+    localStorage.setItem('deferredAlerts', JSON.stringify(deferredAlerts));
+  }
+}
+
+async function handleLogin() {
   const form = document.querySelector('#static-signin-form');
   const username = form.querySelector('input[name=username]').value;
   const userMatch = findUser(allusers, username);
@@ -15,7 +37,9 @@ function handleLogin() {
     localStorage.setItem('firstName', userMatch[0].firstName);
     localStorage.setItem('lastName', userMatch[0].lastName);
     localStorage.setItem('email', userMatch[0].email);
-    localStorage.setItem('alerts', userMatch[0].alerts);
+
+    // Fetch alerts for the user
+    await getAlerts(username);
 
     setTimeout(() => {
       window.location = '/';

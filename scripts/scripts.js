@@ -71,16 +71,21 @@ function setFormPanelRevealAll() {
 function overrideFormSubmit(form) {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
+
     const message = document.createElement('div');
     message.innerHTML = 'Your request has been submitted. <a href="/">Return home</a>';
     form.replaceWith(message);
-    window.localStorage.setItem('activeRequests', JSON.stringify({
+
+    // Store as an array of one request object
+    const newRequest = [{
       title: 'Toll Dispute',
       status: {
         percentage: 5,
         description: 'In Progress',
       },
-    }));
+    }];
+
+    window.localStorage.setItem('activeRequests', JSON.stringify(newRequest));
   });
 }
 

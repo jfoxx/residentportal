@@ -49,6 +49,96 @@ function saveFavorites() {
   window.location = url;
 }
 
+function showHiddenContent(id) {
+  const panel = document.querySelector(`[data-show-id="${id}"]`);
+  panel.classList.add('is-visible');
+  window.scrollTo({
+    top: panel.offsetTop,
+    behavior: 'smooth',
+  });
+}
+
+function activateDeferredAlerts() {
+  const deferredAlertsRaw = localStorage.getItem('deferredAlerts');
+  const alertsRaw = localStorage.getItem('alerts');
+
+  // Parse both values or default to empty arrays
+  const deferredAlerts = deferredAlertsRaw ? JSON.parse(deferredAlertsRaw) : [];
+  const alerts = alertsRaw ? JSON.parse(alertsRaw) : [];
+
+  if (Array.isArray(deferredAlerts) && deferredAlerts.length > 0) {
+    const updatedAlerts = [...deferredAlerts, ...alerts];
+
+    // Save the updated alerts array
+    localStorage.setItem('alerts', JSON.stringify(updatedAlerts));
+
+    // Optionally clear deferredAlerts
+    localStorage.removeItem('deferredAlerts');
+  }
+}
+
+function createSubmittedServicesList(services) {
+  const ul = document.createElement('ul');
+  ul.classList.add('submitted-services-list');
+  services.forEach((service) => {
+    const li = document.createElement('li');
+    li.textContent = service.title;
+    ul.appendChild(li);
+  });
+  return ul;
+}
+
+function applyForServices() {
+  // Parse existing value
+  const stored = JSON.parse(localStorage.getItem('activeRequests'));
+
+  // Normalize to an array
+  let existing;
+  if (Array.isArray(stored)) {
+    existing = stored;
+  } else if (stored) {
+    existing = [stored];
+  } else {
+    existing = [];
+  }
+
+  // Create a Set of existing titles to avoid duplicates
+  const existingTitles = new Set(existing.map((req) => req.title));
+
+  // Select all checked services
+  const services = document.querySelectorAll('.service-list li:has(input:checked)');
+
+  const newRequests = [];
+
+  services.forEach((service) => {
+    const titleElement = service.querySelector('.title');
+    if (titleElement) {
+      const title = titleElement.textContent.trim();
+
+      if (!existingTitles.has(title)) {
+        newRequests.push({
+          title,
+          status: {
+            percentage: 5,
+            description: 'In Progress',
+          },
+        });
+      }
+    }
+  });
+
+  // Combine and save
+  const updatedRequests = [...existing, ...newRequests];
+  localStorage.setItem('activeRequests', JSON.stringify(updatedRequests));
+  const targetDiv = document.querySelector('[data-show-id="thanks-message"]');
+  // eslint-disable-next-line no-template-curly-in-string
+  const targetP = Array.from(targetDiv.querySelectorAll('p')).find((p) => p.textContent.includes('${services}'));
+  if (!targetP) return;
+  // eslint-disable-next-line no-template-curly-in-string
+  targetP.innerHTML = targetP.innerHTML.replace('${services}', createSubmittedServicesList(newRequests).outerHTML);
+  activateDeferredAlerts();
+}
+
 function filterResults() {
   const results = document.querySelectorAll('.service-list li');
   const container = document.querySelector('.eligible-services-container');
@@ -122,6 +212,19 @@ function filterResultsById() {
   setTimeout(() => {
     resultsBlock.scrollTop = 0;
   }, '2000');
+
+  const button = document.querySelector('.eligible-services a.button');
+  button.addEventListener('click', (e) => {
+    e.preventDefault();
+    applyForServices();
+    button.classList.add('submitting');
+
+    setTimeout(() => {
+      resultsBlock.classList.remove('is-visible');
+      resultsBlock.scrollTop = 0;
+      showHiddenContent('thanks-message');
+    }, '2000');
+  });
 }
 
 async function fetchAndDisplayServices(target) {

@@ -9,6 +9,10 @@
             background-color: var(--yellow);
             font-size: var(--body-font-size-s);
 
+            a {
+                color: var(--primary-color);
+            }
+
             button.dismiss {
                 width: 20px;
                 height: 20px;
