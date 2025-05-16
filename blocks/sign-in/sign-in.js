@@ -10,11 +10,11 @@ async function getAlerts(username) {
   console.log('Alerts:', response);
   const immedateAlerts = response
     .filter((alert) => alert.timing === 'immediate')
-    .map((alert) => ({ alert: alert.alert, link: alert.link }));
+    .map((alert) => ({ alert: alert.alert, priority: alert.priority, link: alert.link }));
 
   const deferredAlerts = response
     .filter((alert) => alert.timing === 'deferred')
-    .map((alert) => ({ alert: alert.alert, link: alert.link }));
+    .map((alert) => ({ alert: alert.alert, priority: alert.priority, link: alert.link }));
 
   console.log('Immediate Alerts:', immedateAlerts);
 
