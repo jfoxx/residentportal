@@ -6,7 +6,7 @@
 
         li {
             margin: 0 0 10px;
-            background-color: var(--yellow);
+            background-color: var(--light-color);
             font-size: var(--body-font-size-s);
 
             a {
@@ -20,8 +20,27 @@
                 mask-size: contain;
                 mask-repeat: no-repeat;
                 mask-position: center;
-                background-color: black;
+                background-color: var(--primary-color);
             }
+
+            &.priority-medium {
+                background-color: var(--yellow);
+
+            }
+            
+            &.priority-high {
+                background-color: var(--red);
+
+                a {
+                    color:white;
+                }
+                
+                button.dismiss {
+                    background-color: white;
+                }
+            }
+
+            
         }
     }
 

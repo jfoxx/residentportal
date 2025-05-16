@@ -39,9 +39,10 @@ export default function decorate(block) {
     if (alerts.length > 0) {
       const alertList = document.createElement('ul');
 
-      alerts.forEach(({ alert, link }) => {
+      alerts.forEach(({ alert, priority, link }) => {
         const li = document.createElement('li');
         li.setAttribute('data-alert', alert);
+        li.classList.add(`priority-${priority}`);
 
         const dismiss = document.createElement('button');
         dismiss.className = 'dismiss';
