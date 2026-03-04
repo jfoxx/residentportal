@@ -154,8 +154,8 @@ async function fetchAndDisplayServices(target) {
     filters.forEach((filter) => {
       filter.addEventListener('change', filterResults);
     });
-  } catch (error) {
-    console.error('Error fetching services:', error);
+  } catch {
+    // Error fetching services
   }
 }
 

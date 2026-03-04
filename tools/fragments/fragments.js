@@ -387,9 +387,8 @@ function expandToDepth(item, currentDepth, targetDepth) {
           // Expand folders to the target depth
           expandToDepth(item, 1, targetDepth);
         });
-    } catch (error) {
+    } catch {
       showMessage('Failed to load fragments', true);
-      console.error(error);
       // Also disable cancel button on error
       cancelBtn.disabled = true;
     }

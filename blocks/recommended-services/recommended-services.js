@@ -28,8 +28,8 @@ async function fetchAndDisplayRecommendedServices(serviceId, target) {
     descriptionSpan.textContent = service.description.plaintext || 'No Description';
     link.append(img, titleSpan, descriptionSpan);
     target.appendChild(link);
-  } catch (error) {
-    console.error('Error fetching and displaying services:', error);
+  } catch {
+    // Error fetching and displaying services
   }
 }
 
