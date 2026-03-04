@@ -94,6 +94,32 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
   }
 }
 
+function setActiveNavLink(navSections) {
+  if (!navSections) return;
+  const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+  let activeLink = null;
+  let longestMatch = 0;
+
+  navSections.querySelectorAll('a[href]').forEach((link) => {
+    link.classList.remove('active');
+    try {
+      const linkPath = new URL(link.href).pathname.replace(/\/$/, '') || '/';
+      const isMatch = currentPath === linkPath
+        || (linkPath !== '/' && currentPath.startsWith(`${linkPath}/`));
+      if (isMatch && linkPath.length >= longestMatch) {
+        longestMatch = linkPath.length;
+        activeLink = link;
+      }
+    } catch {
+      // ignore invalid URLs
+    }
+  });
+
+  if (activeLink) {
+    activeLink.classList.add('active');
+  }
+}
+
 function loggedInNavItems() {
   const navItems = document.querySelectorAll('.nav-sections li');
   navItems.forEach((item) => {
@@ -192,4 +218,5 @@ export default async function decorate(block) {
   navWrapper.append(nav);
   block.append(navWrapper);
   loggedInNavItems();
+  setActiveNavLink(navSections);
 }
