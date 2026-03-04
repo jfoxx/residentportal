@@ -11,14 +11,15 @@ main .hero-container {
   position: relative;
   padding: 32px;
   min-height: 300px;
+  color: white;
 }
 
 .hero h1 {
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  color: white;
   text-align: center;
+  font-size: var(--heading-font-size-xl);
 }
 
 .hero picture {
@@ -50,10 +51,16 @@ main .hero-container {
    padding-left: 20px;
    height: 40px;
    border: none;
+   color: white;
+ }
+
+ .search-field::placeholder {
+   color: rgba(255, 255, 255, 0.8);
  }
 
  .search-button {
   height: 40px;
   margin: 0 0 0 10px;
+  color: white;
  }
 }
