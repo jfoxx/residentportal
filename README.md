@@ -2,8 +2,8 @@
 Your project's description...
 
 ## Environments
-- Preview: https://main--warp--jfoxx.hlx.page/
-- Live: https://main--warp--jfoxx.hlx.live/
+- Preview: https://main--residentportal--jfoxx.aem.page/
+- Live: https://main--residentportal--jfoxx.aem.live/
 
 ## Installation
 
@@ -23,7 +23,7 @@ npm run lint
 1. Add the [AEM Code Sync GitHub App](https://github.com/apps/aem-code-sync) to the repository
 1. Install the [AEM CLI](https://github.com/adobe/helix-cli): `npm install -g @adobe/aem-cli`
 1. Start AEM Proxy: `aem up` (opens your browser at `http://localhost:3000`)
-1. Open the `warp` directory in your favorite IDE and start coding :)
+1. Open the project directory in your favorite IDE and start coding :)
 
 ## Prerequisites
 
@@ -52,6 +52,28 @@ npm run lint
 18. Text  
 19. Text Input  
 20. Wizard  
+
+## Deployment Troubleshooting
+
+### Code changes (CSS/JS) not appearing on a repoless live site
+
+In a repoless setup, code changes should appear on both `.aem.page` and `.aem.live` at the same time. If CSS/JS updates show on one site (e.g. `residentportal.aem.page`) but not another (e.g. `ncdisaster.aem.live`), the live site is likely pointing to a different code source.
+
+**Fix:** Update the ncdisaster site config to use the residentportal repo:
+
+1. Get an auth token from [admin.hlx.page/login](https://admin.hlx.page/login) (login with Adobe, copy `auth_token` cookie)
+2. Check current config: `curl -H "x-auth-token: <token>" https://admin.hlx.page/config/jfoxx/sites/ncdisaster.json`
+3. If `code.repo` is not `residentportal`, update it via PUT to the same URL with:
+   ```json
+   { "code": { "owner": "jfoxx", "repo": "residentportal" } }
+   ```
+   (Merge with existing config; see [Admin API](https://www.aem.live/docs/admin.html) and [repoless docs](https://www.aem.live/docs/repoless))
+
+### General deployment issues
+
+1. **Verify AEM Code Sync is installed**: [github.com/apps/aem-code-sync](https://github.com/apps/aem-code-sync) → ensure `residentportal` is in "Repository access"
+2. **Allow sync time**: Code Sync can take a few minutes after merge
+3. **Cache**: Hard refresh (Cmd+Shift+R) or append `?nocache=1` to the URL
 
 ## Resources
 

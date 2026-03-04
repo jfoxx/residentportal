@@ -1,0 +1,77 @@
+.alert-container {
+  padding: 0 !important;
+}
+
+.alert-wrapper {
+  padding: 0 !important;
+  max-width: 100% !important;
+}
+
+.alert {
+  background-color: var(--red);
+  color: white;
+  padding-block: 1.25rem;
+  padding-inline: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+  box-sizing: border-box;
+}
+
+.alert .alert-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  gap: 1rem;
+  max-width: 1264px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.alert .alert-icon {
+  flex-shrink: 0;
+  display: block;
+  width: 28px;
+  height: 28px;
+  background-color: white;
+  mask-image: url('/icons/triangle-exclamation.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+.alert .alert-message {
+  font-size: var(--body-font-size-s);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+}
+
+.alert .alert-message a {
+  color: white;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.alert .alert-message a:hover {
+  color: rgb(255 255 255 / 90%);
+}
+
+@media (width >= 600px) {
+  .alert {
+    padding-block: 1.5rem;
+    min-height: 72px;
+  }
+
+  .alert .alert-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .alert .alert-message {
+    font-size: var(--body-font-size-m);
+  }
+}

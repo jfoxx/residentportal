@@ -1,0 +1,440 @@
+.brand-concierge-container {
+  padding: 3rem 1.5rem 4rem !important;
+  background: linear-gradient(
+    135deg,
+    rgb(230 240 255) 0%,
+    rgb(245 235 255) 40%,
+    rgb(255 245 240) 70%,
+    rgb(255 255 255) 100%
+  );
+}
+
+.brand-concierge-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.brand-concierge-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  text-align: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.brand-concierge-title {
+  margin: 0;
+  font-size: var(--heading-font-size-xl);
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.brand-concierge-subtitle {
+  margin: 0;
+  font-size: var(--body-font-size-s);
+  color: var(--text-color);
+  max-width: 560px;
+}
+
+.brand-concierge-cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  min-width: 0;
+}
+
+@media (width >= 600px) {
+  .brand-concierge-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 900px) {
+  .brand-concierge-cards {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.brand-concierge-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1.25rem 1rem;
+  background: rgb(255 255 255 / 60%);
+  border: 1px solid var(--light-gray);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--body-font-size-s);
+  font-weight: 400;
+  color: var(--text-color);
+  text-align: left;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+  min-height: 0;
+  min-width: 0;
+}
+
+.brand-concierge-card:hover,
+.brand-concierge-card:focus,
+.brand-concierge-card:active {
+  background: white;
+  border-color: var(--primary-color);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
+}
+
+.brand-concierge-card:focus {
+  outline: none;
+}
+
+.brand-concierge-card-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  background-color: var(--red);
+  mask-image: url('/icons/bc-ai.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+.brand-concierge-card-text {
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  flex: 1;
+  min-width: 0;
+  white-space: normal;
+}
+
+.brand-concierge-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 600px;
+  padding: 0.75rem 1rem;
+  background: var(--background-color);
+  border: 1px solid var(--light-gray);
+  border-radius: 24px;
+}
+
+.brand-concierge-ask-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--light-gray);
+  mask-image: url('/icons/bc-ask.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  background-color: currentcolor;
+}
+
+.brand-concierge-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.25rem 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--body-font-size-s);
+  color: var(--text-color);
+}
+
+.brand-concierge-input::placeholder {
+  color: var(--light-gray);
+}
+
+.brand-concierge-input:focus {
+  outline: none;
+}
+
+.brand-concierge-send {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--primary-color);
+  mask-image: url('/icons/bc-send.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  background-color: currentcolor;
+}
+
+.brand-concierge-send:hover {
+  opacity: 0.8;
+}
+
+/* Overlay */
+.brand-concierge-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.brand-concierge-overlay.is-open {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.brand-concierge-overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 40%);
+  cursor: pointer;
+}
+
+.brand-concierge-overlay-panel {
+  position: relative;
+  width: 100%;
+  max-width: 85%;
+  max-height: 90vh;
+  background: white;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -4px 20px rgb(0 0 0 / 15%);
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+
+.brand-concierge-overlay.is-open .brand-concierge-overlay-panel {
+  transform: translateY(0);
+}
+
+.brand-concierge-overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgb(0 0 0 / 10%);
+  flex-shrink: 0;
+}
+
+.brand-concierge-overlay-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-concierge-overlay-title-text {
+  font-size: var(--heading-font-size-m);
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.brand-concierge-overlay-close {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  mask-image: url('/icons/xmark.svg');
+  mask-size: 16px;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  background-color: var(--text-color);
+}
+
+.brand-concierge-overlay-close:hover {
+  opacity: 0.7;
+}
+
+.brand-concierge-overlay-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  font-size: var(--body-font-size-s);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.brand-concierge-overlay-question-pill {
+  display: block;
+  width: fit-content;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  background: rgb(245 245 245);
+  color: var(--text-color);
+  border-radius: 20px;
+  font-size: var(--body-font-size-s);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 6%);
+}
+
+.brand-concierge-overlay-loader-bubble {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 20px;
+  margin-top: 0.5rem;
+  background: rgb(245 245 245);
+  border-radius: 20px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 6%);
+}
+
+.brand-concierge-overlay-loader-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  animation: brand-concierge-loader-dot 1.2s ease-in-out infinite both;
+}
+
+.brand-concierge-overlay-loader-dot:nth-child(1) { animation-delay: 0s; }
+.brand-concierge-overlay-loader-dot:nth-child(2) { animation-delay: 0.2s; }
+.brand-concierge-overlay-loader-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes brand-concierge-loader-dot {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.6; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+.brand-concierge-overlay-section1 {
+  margin-top: 1rem;
+}
+
+.brand-concierge-overlay-section2 {
+  margin-top: 1.5rem;
+}
+
+.brand-concierge-overlay-loader-wrap {
+  margin-top: 1rem;
+}
+
+.brand-concierge-overlay-loading {
+  color: var(--light-gray);
+  font-style: italic;
+}
+
+.brand-concierge-overlay-content p {
+  margin: 0 0 1rem;
+}
+
+.brand-concierge-overlay-content ul {
+  margin: 0 0 1rem;
+  padding-left: 1.5rem;
+}
+
+.brand-concierge-overlay-content li {
+  margin-bottom: 0.5rem;
+}
+
+.brand-concierge-overlay-welcome {
+  margin-bottom: 1rem !important;
+}
+
+.brand-concierge-overlay-prompt {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  background: rgb(230 240 255);
+  color: var(--primary-color);
+  border: none;
+  border-radius: 20px;
+  font-family: inherit;
+  font-size: var(--body-font-size-s);
+  cursor: pointer;
+}
+
+.brand-concierge-overlay-prompt:hover {
+  background: rgb(210 225 255);
+}
+
+.brand-concierge-overlay-input-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  margin: 0 1.5rem 1rem;
+  border: 1px solid var(--light-gray);
+  border-radius: 24px;
+  background: white;
+  flex-shrink: 0;
+}
+
+.brand-concierge-overlay-ask-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--red);
+  mask-image: url('/icons/bc-ask.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  background-color: currentcolor;
+}
+
+.brand-concierge-overlay-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--body-font-size-s);
+  color: var(--text-color);
+}
+
+.brand-concierge-overlay-input::placeholder {
+  color: var(--light-gray);
+}
+
+.brand-concierge-overlay-input:focus {
+  outline: none;
+}
+
+.brand-concierge-overlay-send {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--red);
+  mask-image: url('/icons/bc-send.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  background-color: currentcolor;
+}
+
+.brand-concierge-overlay-send:hover {
+  opacity: 0.8;
+}
+
+.brand-concierge-overlay-disclaimer {
+  margin: 0 !important;
+  padding: 0 1.5rem 1.5rem !important;
+  font-size: var(--body-font-size-xs) !important;
+  color: var(--light-gray) !important;
+}
+
+.brand-concierge-overlay-disclaimer a {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+@media (width < 768px) {
+  .brand-concierge-overlay-panel {
+    max-width: 100%;
+  }
+}
