@@ -7,12 +7,15 @@ async function fetchContent(path) {
   return null;
 }
 
-/** Split content into two sections: before first ### or <h3>, and after */
+/** Split into two sections: main>div or body>div (plain.html structure) */
 function splitContent(html) {
-  const h3Match = html.match(/<h3[\s>]|###\s/m);
-  if (h3Match) {
-    const idx = html.indexOf(h3Match[0]);
-    return [html.substring(0, idx).trim(), html.substring(idx).trim()];
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const main = doc.querySelector('main');
+  const container = main || doc.body;
+  const divs = [...container.children].filter((el) => el.tagName === 'DIV');
+  if (divs.length >= 2) {
+    return [divs[0].innerHTML.trim(), divs[1].innerHTML.trim()];
   }
   return [html, ''];
 }
@@ -88,7 +91,6 @@ async function openOverlay(overlayState, promptKey, questionText) {
     overlay,
     content,
     overlayInput,
-    sendBtn,
   } = overlayState;
   const displayQuestion = questionText || (promptKey !== 'default' ? overlayState.lastCardText : '') || 'Loading...';
 
@@ -175,7 +177,7 @@ export default async function decorate(block) {
   const cardsRow = rows[2];
   const cardTexts = cardsRow ? [...cardsRow.children].map((cell) => cell.textContent?.trim() || '') : [];
 
-  let promptConfig = {};
+  const promptConfig = {};
   try {
     const resp = await fetch('/admin/brand-concierge.json');
     if (resp.ok) {
