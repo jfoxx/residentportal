@@ -7,6 +7,30 @@ async function fetchContent(path) {
   return null;
 }
 
+/** Find prompt key whose card text best matches keywords in the question */
+function findMatchingPromptKey(question, promptCardTexts) {
+  const words = question.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/)
+    .filter((w) => w.length >= 2);
+  if (words.length === 0) return null;
+
+  let bestKey = null;
+  let bestScore = 0;
+
+  Object.entries(promptCardTexts).forEach(([promptKey, cardText]) => {
+    const cardWords = cardText.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/);
+    const match = (w) => cardWords.some((cw) => cw.includes(w) || w.includes(cw));
+    let score = words.filter(match).length;
+    const keyAsWord = promptKey.toLowerCase();
+    if (words.includes(keyAsWord)) score += 10;
+    if (score > bestScore) {
+      bestScore = score;
+      bestKey = promptKey;
+    }
+  });
+
+  return bestScore > 0 ? bestKey : null;
+}
+
 /** Split into two sections: main>div or body>div (plain.html structure) */
 function splitContent(html) {
   const parser = new DOMParser();
@@ -20,14 +44,20 @@ function splitContent(html) {
   return [html, ''];
 }
 
-function createLoaderHtml(questionText) {
-  const q = (questionText || 'Loading...')
+function createQuestionPill(questionText) {
+  if (!questionText) return '';
+  const q = questionText
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+  return `<div class="brand-concierge-overlay-question-pill">${q}</div>`;
+}
+
+function createLoaderHtml(questionText) {
+  const pill = createQuestionPill(questionText) || createQuestionPill('Loading...');
   return `
-    <div class="brand-concierge-overlay-question-pill">${q}</div>
+    ${pill}
     <div class="brand-concierge-overlay-loader-bubble">
       <span class="brand-concierge-overlay-loader-dot"></span>
       <span class="brand-concierge-overlay-loader-dot"></span>
@@ -92,6 +122,12 @@ async function openOverlay(overlayState, promptKey, questionText) {
     content,
     overlayInput,
   } = overlayState;
+
+  let resolvedKey = promptKey;
+  if (promptKey === 'default' && questionText && overlayState.promptCardTexts) {
+    resolvedKey = findMatchingPromptKey(questionText, overlayState.promptCardTexts) || 'default';
+  }
+
   const displayQuestion = questionText || (promptKey !== 'default' ? overlayState.lastCardText : '') || 'Loading...';
 
   content.innerHTML = createLoaderHtml(displayQuestion);
@@ -104,7 +140,7 @@ async function openOverlay(overlayState, promptKey, questionText) {
   document.body.style.overflow = 'hidden';
   requestAnimationFrame(() => overlay.classList.add('is-open'));
 
-  const path = overlayState.promptConfig?.[promptKey];
+  const path = overlayState.promptConfig?.[resolvedKey];
   if (path) {
     const html = await fetchContent(path);
     if (html) {
@@ -113,12 +149,7 @@ async function openOverlay(overlayState, promptKey, questionText) {
 
       overlayState.contentTimeout = setTimeout(() => {
         if (!document.body.contains(overlay)) return;
-        const q = (displayQuestion !== 'Loading...' ? displayQuestion : '')
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;');
-        const questionPill = q ? `<div class="brand-concierge-overlay-question-pill">${q}</div>` : '';
+        const questionPill = createQuestionPill(displayQuestion);
         content.innerHTML = `${questionPill}<div class="brand-concierge-overlay-section1">${section1}</div>`;
         if (section2) {
           const section2Div = document.createElement('div');
@@ -129,10 +160,18 @@ async function openOverlay(overlayState, promptKey, questionText) {
         }
       }, 2000);
     } else {
-      content.innerHTML = '<p>Content could not be loaded.</p>';
+      overlayState.contentTimeout = setTimeout(() => {
+        if (!document.body.contains(overlay)) return;
+        const pill = createQuestionPill(displayQuestion);
+        content.innerHTML = `${pill}<p>Content could not be loaded.</p>`;
+      }, 2000);
     }
   } else {
-    content.innerHTML = '<p>Content not configured for this prompt.</p>';
+    overlayState.contentTimeout = setTimeout(() => {
+      if (!document.body.contains(overlay)) return;
+      const pill = createQuestionPill(displayQuestion);
+      content.innerHTML = `${pill}<p>Content not configured for this prompt.</p>`;
+    }, 2000);
   }
 }
 
@@ -213,6 +252,12 @@ export default async function decorate(block) {
 
   const overlayState = createOverlay();
   overlayState.promptConfig = promptConfig;
+  overlayState.promptCardTexts = Object.keys(promptConfig).reduce((acc, key) => {
+    const idx = parseInt(key.replace(/\D/g, ''), 10) - 1;
+    const cardText = (idx >= 0 && cardTexts[idx]) ? cardTexts[idx] : key;
+    acc[key] = cardText;
+    return acc;
+  }, {});
   const { overlay, backdrop } = overlayState;
 
   const hideOverlay = () => closeOverlay(overlayState);
