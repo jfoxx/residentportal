@@ -205,7 +205,8 @@
   position: relative;
   width: 100%;
   max-width: 85%;
-  max-height: 90vh;
+  height: 90vh;
+  min-height: 90vh;
   background: white;
   border-radius: 12px 12px 0 0;
   box-shadow: 0 -4px 20px rgb(0 0 0 / 15%);
@@ -263,6 +264,7 @@
   flex: 1;
   overflow-y: auto;
   padding: 1.5rem;
+  margin-bottom: 1.5rem;
   font-size: var(--body-font-size-s);
   color: var(--text-color);
   line-height: 1.6;
@@ -304,8 +306,15 @@
 .brand-concierge-overlay-loader-dot:nth-child(3) { animation-delay: 0.4s; }
 
 @keyframes brand-concierge-loader-dot {
-  0%, 80%, 100% { transform: scale(0.6); opacity: 0.6; }
-  40% { transform: scale(1); opacity: 1; }
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.6;
+  }
+
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .brand-concierge-overlay-section1 {
