@@ -85,6 +85,12 @@ header nav a:any-link {
   color: currentcolor;
 }
 
+header nav .nav-sections a.active {
+  text-decoration: underline;
+  text-decoration-color: red;
+  text-underline-offset: 4px;
+}
+
 /* hamburger */
 header nav .nav-hamburger {
   grid-area: hamburger;
