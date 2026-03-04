@@ -55,7 +55,7 @@ main .hero-container {
  }
 
  .search-field::placeholder {
-   color: rgba(255, 255, 255, 0.8);
+   color: rgb(255 255 255 / 80%);
  }
 
  .search-button {

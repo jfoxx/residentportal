@@ -6,8 +6,7 @@ function dismissAlert() {
 
   try {
     currAlerts = JSON.parse(localStorage.getItem('alerts')) || [];
-  } catch (e) {
-    console.error('Failed to parse alerts from localStorage', e);
+  } catch {
     currAlerts = [];
   }
 
@@ -31,8 +30,7 @@ export default function decorate(block) {
     try {
       alerts = JSON.parse(storedAlerts);
       if (!Array.isArray(alerts)) alerts = [];
-    } catch (e) {
-      console.error('Invalid alert format in localStorage', e);
+    } catch {
       alerts = [];
     }
 

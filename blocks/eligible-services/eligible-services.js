@@ -44,7 +44,6 @@ function saveFavorites() {
   let url = new URL(`${window.location.origin}${window.location.pathname}`);
   if (block.getAttribute('data-redirect')) {
     url = `/${block.getAttribute('data-redirect')}`;
-    console.log(url);
   }
   window.location = url;
 }
@@ -266,8 +265,8 @@ async function fetchAndDisplayServices(target) {
     });
 
     target.appendChild(ul);
-  } catch (error) {
-    console.error('Error fetching and displaying services:', error);
+  } catch {
+    // Error fetching and displaying services
   }
 }
 
