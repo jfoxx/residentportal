@@ -7,6 +7,30 @@ async function fetchContent(path) {
   return null;
 }
 
+/** Find prompt key whose text best matches keywords in the question */
+function findMatchingPromptKey(question, promptTexts) {
+  const words = question.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/)
+    .filter((w) => w.length >= 2);
+  if (words.length === 0) return null;
+
+  let bestKey = null;
+  let bestScore = 0;
+
+  Object.entries(promptTexts).forEach(([promptKey, promptText]) => {
+    const promptWords = promptText.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/);
+    const match = (w) => promptWords.some((pw) => pw.includes(w) || w.includes(pw));
+    let score = words.filter(match).length;
+    const keyAsWord = promptKey.toLowerCase();
+    if (words.includes(keyAsWord)) score += 10;
+    if (score > bestScore) {
+      bestScore = score;
+      bestKey = promptKey;
+    }
+  });
+
+  return bestScore > 0 ? bestKey : null;
+}
+
 /** Split into two sections: main>div or body>div (plain.html structure) */
 function splitContent(html) {
   const parser = new DOMParser();
@@ -92,6 +116,17 @@ async function openOverlay(overlayState, promptKey, questionText) {
     content,
     overlayInput,
   } = overlayState;
+
+  let resolvedKey = promptKey;
+  let pathConfig = overlayState.promptConfig;
+  if (promptKey === 'default' && questionText && overlayState.keywordsConfig) {
+    const promptTexts = Object.fromEntries(
+      Object.keys(overlayState.keywordsConfig).map((k) => [k, k]),
+    );
+    resolvedKey = findMatchingPromptKey(questionText, promptTexts) || 'default';
+    pathConfig = overlayState.keywordsConfig;
+  }
+
   const displayQuestion = questionText || (promptKey !== 'default' ? overlayState.lastCardText : '') || 'Loading...';
 
   content.innerHTML = createLoaderHtml(displayQuestion);
@@ -104,7 +139,7 @@ async function openOverlay(overlayState, promptKey, questionText) {
   document.body.style.overflow = 'hidden';
   requestAnimationFrame(() => overlay.classList.add('is-open'));
 
-  const path = overlayState.promptConfig?.[promptKey];
+  const path = pathConfig?.[resolvedKey];
   if (path) {
     const html = await fetchContent(path);
     if (html) {
@@ -174,21 +209,36 @@ export default async function decorate(block) {
   const rows = [...block.children];
   const title = rows[0]?.textContent?.trim() || '';
   const subtitle = rows[1]?.textContent?.trim() || '';
-  const cardsRow = rows[2];
-  const cardTexts = cardsRow ? [...cardsRow.children].map((cell) => cell.textContent?.trim() || '') : [];
 
   const promptConfig = {};
+  const keywordsConfig = {};
   try {
     const resp = await fetch('/admin/brand-concierge.json');
     if (resp.ok) {
       const json = await resp.json();
-      // Parse AEM sheet format: { data: [{ prompt, response }, ...] }
-      if (Array.isArray(json.data)) {
-        json.data.forEach(({ prompt, response }) => {
-          if (prompt && response) {
-            promptConfig[prompt] = response;
-          }
-        });
+      const parsePromptsSheet = (sheet) => {
+        const out = {};
+        if (sheet?.data && Array.isArray(sheet.data)) {
+          sheet.data.forEach(({ prompt, response }) => {
+            if (prompt && response) out[prompt] = response;
+          });
+        }
+        return out;
+      };
+      const parseKeywordsSheet = (sheet) => {
+        const out = {};
+        if (sheet?.data && Array.isArray(sheet.data)) {
+          sheet.data.forEach(({ keyword, response }) => {
+            if (keyword && response) out[keyword] = response;
+          });
+        }
+        return out;
+      };
+      if (json[':type'] === 'multi-sheet') {
+        Object.assign(promptConfig, parsePromptsSheet(json.data));
+        Object.assign(keywordsConfig, parseKeywordsSheet(json.keywords));
+      } else {
+        Object.assign(promptConfig, parsePromptsSheet(json));
       }
     }
   } catch {
@@ -213,6 +263,7 @@ export default async function decorate(block) {
 
   const overlayState = createOverlay();
   overlayState.promptConfig = promptConfig;
+  overlayState.keywordsConfig = keywordsConfig;
   const { overlay, backdrop } = overlayState;
 
   const hideOverlay = () => closeOverlay(overlayState);
@@ -231,25 +282,22 @@ export default async function decorate(block) {
   });
   overlayState.sendBtn.addEventListener('click', handleOverlaySubmit);
 
-  cardTexts.forEach((text, index) => {
-    if (text) {
-      const card = document.createElement('button');
-      card.type = 'button';
-      card.className = 'brand-concierge-card';
-      const icon = document.createElement('span');
-      icon.className = 'brand-concierge-card-icon';
-      icon.setAttribute('aria-hidden', 'true');
-      const label = document.createElement('span');
-      label.className = 'brand-concierge-card-text';
-      label.textContent = text;
-      card.append(icon, label);
-      const promptKey = `prompt${index + 1}`;
-      card.addEventListener('click', () => {
-        overlayState.lastCardText = text;
-        openOverlay(overlayState, promptKey, text);
-      });
-      cardsContainer.append(card);
-    }
+  Object.entries(promptConfig).forEach(([promptText]) => {
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'brand-concierge-card';
+    const icon = document.createElement('span');
+    icon.className = 'brand-concierge-card-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    const label = document.createElement('span');
+    label.className = 'brand-concierge-card-text';
+    label.textContent = promptText;
+    card.append(icon, label);
+    card.addEventListener('click', () => {
+      overlayState.lastCardText = promptText;
+      openOverlay(overlayState, promptText, promptText);
+    });
+    cardsContainer.append(card);
   });
 
   const inputWrapper = document.createElement('div');
