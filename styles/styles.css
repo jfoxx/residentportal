@@ -96,10 +96,6 @@ body.appear {
 
 
 
-.at-element-marker {
-  display: none;
-}
-
 header {
   height: var(--nav-height);
 }
