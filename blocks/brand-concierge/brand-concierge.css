@@ -130,7 +130,7 @@
   width: 20px;
   height: 20px;
   flex-shrink: 0;
-  color: var(--light-gray);
+  color: var(--red);
   mask-image: url('/icons/bc-ask.svg');
   mask-size: contain;
   mask-repeat: no-repeat;
@@ -150,7 +150,7 @@
 }
 
 .brand-concierge-input::placeholder {
-  color: var(--light-gray);
+  color: rgb(100 100 100);
 }
 
 .brand-concierge-input:focus {
@@ -404,7 +404,7 @@
 }
 
 .brand-concierge-overlay-input::placeholder {
-  color: var(--light-gray);
+  color: rgb(100 100 100);
 }
 
 .brand-concierge-overlay-input:focus {
